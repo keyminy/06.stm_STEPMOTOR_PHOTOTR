@@ -180,7 +180,7 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim2);  // ADD_SIKWON_0523
   HAL_TIM_Base_Start_IT(&htim11);  // ADD_SIKWON_0523
 
-//  i2c_lcd_init();  // !!! 주의 LCD�??? ?��결이 ?��?�� ?��?��?��?��?�� i2C ?��?�� ?��?��?��.
+
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -583,6 +583,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI0_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI1_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI1_IRQn);
 
 }
 
