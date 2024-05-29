@@ -2,7 +2,7 @@
 #include "def.h"
 #include "button.h"
 
-extern motor_state; // default : MOTOR_IDLE
+int  motor_state = MOTOR_IDLE; // default : MOTOR_IDLE
 
 extern void delay_us(unsigned int us);
 void set_rpm(int rpm);
@@ -65,6 +65,7 @@ void perform_motor_step_backward() {
 	static int step = 7; // This static variable retains its value between function calls
 	stepmotor_drive(step); // Perform one step
 	step = (step -1 + 8) % 8; // Cycle through step sequence
+	// if(step <0) step = 7;
 	set_rpm(13); // 1,126.8028846153us delay
 }
 

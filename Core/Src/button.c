@@ -7,7 +7,7 @@
 #include "button.h" 
 #include "def.h"
 
-extern motor_state; // default : MOTOR_IDLE
+extern int motor_state; // default : MOTOR_IDLE
 
 unsigned char button_status[BUTTON_NUMBER] =
 	{BUTTON_RELEASE,BUTTON_RELEASE,BUTTON_RELEASE};

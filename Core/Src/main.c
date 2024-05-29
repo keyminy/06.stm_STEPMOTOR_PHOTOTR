@@ -52,8 +52,6 @@ TIM_HandleTypeDef htim11;
 
 UART_HandleTypeDef huart2;
 
-int motor_state = MOTOR_IDLE;
-
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
@@ -181,8 +179,8 @@ int main(void)
   HAL_UART_Receive_IT(&huart2, &rx_data, 1);   // assign RX INT
   HAL_TIM_Base_Start_IT(&htim2);  // ADD_SIKWON_0523
   HAL_TIM_Base_Start_IT(&htim11);  // ADD_SIKWON_0523
-//  DHT11_Init();
-//  i2c_lcd_init();  // !!! 주의 LCD�?? ?��결이 ?��?�� ?��?��?��?��?�� i2C ?��?�� ?��?��?��.
+
+//  i2c_lcd_init();  // !!! 주의 LCD�??? ?��결이 ?��?�� ?��?��?��?��?�� i2C ?��?�� ?��?��?��.
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -543,9 +541,6 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, DHT11_Pin|LD2_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LED0_Pin|LED1_Pin|LED2_Pin|LATCH_74HC595_Pin
                           |LED3_Pin|LED4_Pin|LED5_Pin|LED6_Pin
                           |LED7_Pin, GPIO_PIN_RESET);
@@ -565,11 +560,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : DHT11_Pin LD2_Pin */
-  GPIO_InitStruct.Pin = DHT11_Pin|LD2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  /*Configure GPIO pins : PA0 PA1 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED0_Pin LED1_Pin LED2_Pin LATCH_74HC595_Pin
@@ -610,7 +604,8 @@ void StartDefaultTask(void *argument)
   for(;;)  // while(1)
   {
 	  stepmotor_btn_check();
-    osDelay(1);
+	  stepmotor_main();
+	  osDelay(1);
   }
   /* USER CODE END 5 */
 }
@@ -628,7 +623,8 @@ void StartTask01(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  stepmotor_main();
+//	  stepmotor_main();
+
 	  osDelay(1);
   }
   /* USER CODE END StartTask01 */
